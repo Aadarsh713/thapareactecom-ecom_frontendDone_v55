@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { FiShoppingCart } from "react-icons/fi";
 import { CgMenu, CgClose } from "react-icons/cg";
 import { useCartContext } from "../context/cart_context";
+import { Link } from "react-router-dom"
+import {useNavigate} from 'react-router-dom'
 
 const Nav = () => {
   const [menuIcon, setMenuIcon] = useState();
@@ -163,6 +165,12 @@ const Nav = () => {
     }
   `;
 
+  let navigate = useNavigate();
+  const handlelogout=()=>{
+    localStorage.removeItem('token')
+    navigate("/login")
+  }
+
   return (
     <Nav>
       <div className={menuIcon ? "navbar active" : "navbar"}>
@@ -199,12 +207,17 @@ const Nav = () => {
               Contact
             </NavLink>
           </li>
+          {!localStorage.getItem('token') ? <form className="d-flex" role="search">
+              <li><Link className="navbar-link" to="/login" role="button">Login</Link></li>
+              <Link className="navbar-link" to="/signup" role="button">Signup</Link>
+            </form> : <button className='btn btn-primary' onClick={handlelogout}>Logout</button>}
           <li>
             <NavLink to="/cart" className="navbar-link cart-trolley--link">
               <FiShoppingCart className="cart-trolley" />
               <span className="cart-total--item"> {total_item} </span>
             </NavLink>
           </li>
+     
         </ul>
 
         {/* two button for open and close of menu */}
